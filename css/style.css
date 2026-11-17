@@ -137,6 +137,74 @@ header{
     cursor: pointer;
 }
 
+.has-dropdown{
+    position: relative;
+}
+.dropdown{
+    list-style: none;
+}
+.nav-links .dropdown a{
+    display: block;
+}
+.has-dropdown > a i{
+    font-size: 11px;
+    margin-left: 4px;
+    transition: transform 0.3s;
+}
+
+/* Desktop: show the list when hovering over "Our Business" */
+@media(min-width: 801px){
+    .dropdown{
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        margin-top: 16px;
+        min-width: 260px;
+        padding: 8px 0;
+        background-color: #ffffff;
+        border-top: 3px solid var(--red);
+        border-radius: 8px;
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+        opacity: 0;
+        visibility: hidden;
+        transform: translate(-50%, 10px);
+        transition: opacity 0.25s, transform 0.25s, visibility 0.25s;
+    }
+
+    /*Invisble bridge so the list doesn't close with moving the mouse down to it */
+    .dropdown::before{
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: -20px;
+        height: 20px;
+    }
+
+    .has-dropdown:hover .dropdown,
+    .has-dropdown:focus-within .dropdown{
+        opacity: 1;
+        visibility: visible;
+        transform: translate(-50%, 0);
+    }
+
+    .has-dropdown:hover > a i,
+    .has-dropdown:focus-within > a i{
+        transform: rotate(180deg);
+    }
+
+    .nav-links .dropdown a{
+        padding: 10px 20px;
+        font-size: 14px;
+        white-space: nowrap;
+    }
+
+    .nav-links .dropdown a:hover{
+        background-color: #f4f6f3;
+    }
+}
+
+
 
 /*Hero*/
 .hero{
@@ -501,6 +569,7 @@ more-info-btn i{
     color: var(--green);
     font-family: 'Arial Narrow', Arial, sans-serif;
     font-size: 25px;
+    margin-bottom: 30px;
 }
 
 
@@ -629,11 +698,11 @@ more-info-btn i{
     margin-bottom: 10px;
 }
 
-.about h1, .about h2{
+.about h1, .about h2, .business h1{
     color: var(--green);
     font-size: 45px;
     font-family: 'Arial Narrow', Arial, sans-serif;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
 }
 
 .about p{
@@ -641,7 +710,7 @@ more-info-btn i{
     color: #555555;
     margin-left: auto;
     margin-right: auto;
-    margin-bottom: 20px;
+    margin-bottom: 50px;
     max-width: 650px;
 }
 
@@ -653,14 +722,14 @@ more-info-btn i{
 .about-grid{
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 60px;
+    gap: 100px;
     max-width: 1000px;
     margin: 0 auto;
 }
 
 .about-block h3{
     color: var(--red);
-    margin-bottom: 10px;
+    margin-bottom: 15px;
 }
 
 /*icon*/
@@ -1015,6 +1084,8 @@ textarea:focus{
         align-items: center;
         justify-content: center;
     }
+    
+
     .nav-links{ 
         display: flex;
         visibility: hidden;
@@ -1097,6 +1168,23 @@ textarea:focus{
     }
     .coverage-map .leaflet-tile-pane{
         filter: none;
+    }
+}
+
+/*Phone: show the business as an indented list inside the menu*/
+@media(max-width: 800px){
+    .has-dropdown > a i{
+        display: none;
+    }
+
+    .dropdown{
+        background-color: #f7f9f7;
+    }
+
+    .nav-links .dropdown a{
+        padding: 12px 24px 12px 44px;
+        font-size: 14px;
+        font-weight: 400;
     }
 }
 
