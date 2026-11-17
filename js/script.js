@@ -17,27 +17,27 @@ if(contactForm){
     contactForm.addEventListener('submit', function(e){
         e.preventDefault();
 
-        /* Sends the form to Web3Forms, which emails it to the inbox linked to the access key in index.html */
+        /* Sends the form to Formspree, which emails is to admin@egmusaha.com */
         var form = e.target;
         var data = new FormData(form);
         var button = form.querySelector('button[type="submit"]');
         var status = document.getElementById('form-status');
 
-        data.append('subject', 'Website enquiry from ' + data.get('name'));
+        data.append('_subject', 'Website enquiry from ' + data.get('name'));
 
         button.disabled = true;
         button.textContent = 'Sending...';
         status.style.color = '';
         status.textContent = 'Sending your enquiry...';
 
-        fetch('https://api.web3forms.com/submit', {
+        fetch('https://formspree.io/f/xabcefg', {
             method: 'POST',
             headers: { 'Accept': 'application/json' },
             body: data
         })
             .then(function (response) { return response.json(); })
             .then(function (result) {
-                if (result.success) {
+                if (result.ok) {
                     status.style.color = 'var(--green)';
                     status.textContent = "Thank you! Your enquiry has been sent. We'll be in touch soon.";
                     form.reset();

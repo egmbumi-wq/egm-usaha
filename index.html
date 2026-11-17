@@ -44,7 +44,14 @@
             <ul class="nav-links" id="main-menu">
                 <li><a href="#home">Home</a></li>
                 <li><a href="#about">About Us</a></li>
-                <li><a href="#business" class="active">Our Business</a></li>
+                <li class="has-dropdown">
+                    <a href="#business">Our Business<i class="fa-solid fa-chevron-down" aria-hidden="true"></i></a>
+                    <ul class="dropdown">
+                        <li><a href="pages/construction.html">Construction &amp; Engineering</a></li>
+                        <li><a href="pages/safety-system.html">Energy &amp; Safety Systems</a></li>
+                        <li><a href="pages/marine.html">Logistics, Marine &amp; Trading</a></li>
+                    </ul>
+                </li>
                 <li><a href="#coverage">Coverage</a></li>
                 <li><a href="#contact">Contact Us</a></li>
             </ul>
@@ -78,6 +85,19 @@
                 EGM Usaha is a Borneo-based provider of fire systems, lifesaving equipment and civil works, serving customers across Sarawak, Sabah, Indonesia and Brunei.
             </p>
 
+            <div class="about-grid">
+                <div class="about-block">
+                    <h3>What We Do</h3>
+                    <p>We supply, install and maintain fire systems, provide marine, industrial and safety lifesaving equipment, and carry out construction, renovation and infrastructure works.</p>
+                </div>
+
+                <div class="about-block">
+                    <h3>Local Roots, Regional Reach</h3>
+                    <p>Based in Miri, we support customers across Borneo with one aim: a safer tomorrow for people and communities.</p> 
+                </div>
+            </div>
+
+            
             <ul class="industry-list">
                 <li class="industry-item">
                     <span class="industry-icon"><i class="fa-solid fa-building" aria-hidden="true"></i></span>
@@ -101,7 +121,10 @@
                 </li>
             </ul>
 
-            <a href="pages/about.html" class="btn">Learn More</a>
+            
+
+            
+
         </div>
     </section>
 
@@ -255,17 +278,19 @@
                 <h2>Get In Touch</h2>
 
                 <p><strong>Nigel Goh</strong>Business Development Executive</p>
-                <p><strong>Email</strong><a href="mailto:nigelgkt@egmusaha.com">nigelgkt@egmusaha.com</a></p>
+                <p><strong>Email</strong><a href="mailto:admin@egmusaha.com">admin@egmusaha.com</a></p>
                 <p><strong>Phone</strong><a href="tel: +60172179899">+60 17-217 9899</a></p>
                 <p><strong>Address</strong>Lot 2911, Boulevard Commercial Centre,<br>Miri, Sarawak, Malaysia</p>
             </div>
 
             <form id="contact-form" class="contact-form">
-                <!-- Web3Forms: sends the enquiry straight to the inbox linked to this key -->
-                <input type="hidden" name="access_key" value="753b02e1-7262-4372-90e9-c2cdabe67d3a">
+
+                <!--Web3Forms: sends the enquiry straight to the inbox linked to this key -->
+                <input type="hidden" name="access_key" value="PASTE-NEW-KEY HERE">
                 <input type="hidden" name="from_name" value="EGM Usaha Website">
-                <!-- Spam trap: real visitors never see or tick this -->
+                <!--Spam trap: real visitors never see or tick this-->
                 <input type="checkbox" name="botcheck" class="hidden" style="display: none;" tabindex="-1" autocomplete="off">
+
                 <label>Name
                     <input type="text" name="name" required>
                 </label>
@@ -287,7 +312,7 @@
         </div> 
     </section>
 
-    
+    <!--Footer-->
     <footer class="footer">
         <div class="footer-top">
 
@@ -300,7 +325,7 @@
                     Lot 2911, Boulevard Commercial Centre,<br>
                     98000 Miri, Sarawak, Malaysia<br>
                     Tel: <a href="tel: +60172179899">+60 17-217 9899</a><br>
-                    Email: <a href="mailto:nigelgkt@egmusaha.com">nigelgkt@egmusaha.com</a>
+                    Email: <a href="mailto:admin@egmusaha.com">admin@egmusaha.com</a>
                 </address>
             </div>
 
@@ -326,7 +351,7 @@
     </footer>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="js/script.js?v=11"></script>
+    <script src="js/script.js?v=12"></script>
 
 </body>
 
