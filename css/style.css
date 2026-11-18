@@ -27,7 +27,7 @@
 }
 
 /*Firefox and old browser load*/
-@keyframe fadeIn{
+@keyframes fadeIn{
     from{ opacity: 0;}
     to{ opacity: 1;}
 }
@@ -494,7 +494,7 @@ header{
 
 .business-reveal{
     display: grid;
-    grid-template-rows: 1cqh;
+    grid-template-rows: 0fr;
     opacity: 1;
     transition: grid-template-rows 0.4s ease, opacity 0.3s ease;
 }
@@ -547,7 +547,7 @@ header{
     transition: color 0.3s;
 }
 
-more-info-btn i{
+.more-info-btn i{
     transition: transform 0.3s;
 }
 
@@ -1115,7 +1115,7 @@ textarea:focus{
         font-size: 16px;
         font-weight: 600;
     }
-    .navlinks li{
+    .nav-links li{
         border-bottom: 1px solid #eef1ee;
     }
     .navlinks li:last-child{
