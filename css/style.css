@@ -163,7 +163,7 @@ header{
         padding: 8px 0;
         background-color: #ffffff;
         border-top: 3px solid var(--red);
-        border-radius: 8px;
+        border-radius: 0;
         box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
         opacity: 0;
         visibility: hidden;
