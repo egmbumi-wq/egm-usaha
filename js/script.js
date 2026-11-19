@@ -17,27 +17,27 @@ if(contactForm){
     contactForm.addEventListener('submit', function(e){
         e.preventDefault();
 
-        /* Sends the form to Formspree, which emails is to admin@egmusaha.com */
+        /* Sends the form to Web3Forms, which emails it to the inbox linked to the access_key in index.html */
         var form = e.target;
         var data = new FormData(form);
         var button = form.querySelector('button[type="submit"]');
         var status = document.getElementById('form-status');
 
-        data.append('_subject', 'Website enquiry from ' + data.get('name'));
+        data.append('subject', 'Website enquiry from ' + data.get('name'));
 
         button.disabled = true;
         button.textContent = 'Sending...';
         status.style.color = '';
         status.textContent = 'Sending your enquiry...';
 
-        fetch('https://formspree.io/f/xabcefg', {
+        fetch('https://api.web3forms.com/submit', {
             method: 'POST',
             headers: { 'Accept': 'application/json' },
             body: data
         })
             .then(function (response) { return response.json(); })
             .then(function (result) {
-                if (result.ok) {
+                if (result.success) {
                     status.style.color = 'var(--green)';
                     status.textContent = "Thank you! Your enquiry has been sent. We'll be in touch soon.";
                     form.reset();
@@ -47,7 +47,7 @@ if(contactForm){
             })
             .catch(function () {
                 status.style.color = 'var(--red)';
-                status.textContent = 'Sorry, something went wrong. Please email nigelgkt@egmusaha.com or call +60 17-217 9899.';
+                status.textContent = 'Sorry, something went wrong. Please email enquiry@gmail.com or call +60 17-217 9899.';
             })
             .finally(function () {
                 button.disabled = false;
