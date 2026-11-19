@@ -21,7 +21,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-    <link rel="stylesheet" href="css/style.css?v=6">
+    <link rel="stylesheet" href="css/style.css?v=8">
 </head>
 
 <body>
@@ -245,23 +245,24 @@
 
             <div id="coverage-map" class="coverage-map"></div>
 
+            <!-- Click a card to zoom the map to that area (see "coverage" in script.js) -->
             <ul class="coverage-list">
-                <li class="coverage-item">
+                <li class="coverage-item" data-place="sarawak" role="button" tabindex="0" aria-pressed="false">
                     <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
                     <h3>Sarawak</h3>
                     <p>Headquarters, Miri</p>
                 </li>
-                <li class="coverage-item">
+                <li class="coverage-item" data-place="sabah" role="button" tabindex="0" aria-pressed="false">
                     <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
                     <h3>Sabah</h3>
                     <p>East Malaysia</p>
                 </li>
-                <li class="coverage-item">
+                <li class="coverage-item" data-place="brunei" role="button" tabindex="0" aria-pressed="false">
                     <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
                     <h3>Brunei</h3>
                     <p>Cross-border support</p>
                 </li>
-                <li class="coverage-item">
+                <li class="coverage-item" data-place="indonesia" role="button" tabindex="0" aria-pressed="false">
                     <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
                     <h3>Indonesia</h3>
                     <p>Cross-border support</p>
@@ -350,7 +351,7 @@
     </footer>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="js/script.js?v=12"></script>
+    <script src="js/script.js?v=14"></script>
 
 </body>
 

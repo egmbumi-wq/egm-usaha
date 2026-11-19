@@ -73,14 +73,20 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
+    /* area = the part of the map shown when that card is clicked */
     var places = [
-        {name: 'Sarawak', lat:4.3995, lng: 113.9914, side: 'left'},
-        {name: 'Sabah', lat: 5.9804, lng: 116.0735},
-        {name:'Brunei', lat: 4.9031, lng: 114.9398, side: 'top'},
-        {name:'Indonesia', lat: -1.2379, lng: 116.8529}
+        {key: 'sarawak', name: 'Sarawak', lat:4.3995, lng: 113.9914, side: 'left',
+            area: [[0.85, 109.5], [5.1, 115.6]]},
+        {key: 'sabah', name: 'Sabah', lat: 5.80, lng: 117.00,
+            area: [[4.1, 115.3], [7.4, 119.3]]},
+        {key: 'brunei', name:'Brunei', lat: 4.9031, lng: 114.9398, side: 'top',
+            area: [[3.8, 113.6], [5.4, 115.8]]},
+        {key: 'indonesia', name:'Indonesia', lat: -1.2379, lng: 116.8529,
+            area: [[-4.2, 108.8], [4.4, 119.0]]}
     ];
 
     var points = [];
+    var markers = {};
 
     var pinIcon = L. divIcon({
         className: 'map-pin',
@@ -93,7 +99,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         var side=p.side || 'right';
         var offset = side === 'left' ? [-18, -22] : side === 'top' ? [0, -46] : [18, -22];
 
-        L.marker([p.lat, p.lng], {icon: pinIcon})
+        markers[p.key] = L.marker([p.lat, p.lng], {icon: pinIcon})
             .addTo(map)
             .bindTooltip(p.name, {
                 permanent: true,
@@ -109,11 +115,82 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
     window.addEventListener('load', function(){
         map.invalidateSize();
-        map.fitBounds(points, { padding: [40, 40] });
+        if (!activePlace) {
+            map.fitBounds(points, { padding: [40, 40] });
+        }
     });
 
     window.addEventListener('resize', function (){
         map.invalidateSize();
+    });
+
+    /* Click a coverage card -> zoom the map to that area */
+    var coverageCards = document.querySelectorAll('.coverage-item[data-place]');
+    var mapBox = document.getElementById('coverage-map');
+    var activePlace = null;
+
+    /* "Show all areas" button, only visible while zoomed in */
+    var resetControl = L.control({ position: 'topright' });
+    resetControl.onAdd = function () {
+        var btn = L.DomUtil.create('button', 'map-reset');
+        btn.type = 'button';
+        btn.innerHTML = '<i class="fa-solid fa-arrow-left" aria-hidden="true"></i>Show all areas';
+        L.DomEvent.disableClickPropagation(btn);
+        L.DomEvent.on(btn, 'click', function () { showPlace(null); });
+        return btn;
+    };
+    resetControl.addTo(map);
+
+    function showPlace(key) {
+        activePlace = key;
+        mapBox.classList.toggle('is-zoomed', key !== null);
+
+        /* highlight the chosen card, pin and label; fade the others */
+        coverageCards.forEach(function (card) {
+            var on = card.getAttribute('data-place') === key;
+            card.classList.toggle('is-active', on);
+            card.setAttribute('aria-pressed', on ? 'true' : 'false');
+        });
+
+        places.forEach(function (p) {
+            var pin = markers[p.key].getElement();
+            var label = markers[p.key].getTooltip().getElement();
+            var state = key === null ? '' : (p.key === key ? 'is-active' : 'is-dimmed');
+            [pin, label].forEach(function (el) {
+                if (!el) { return; }
+                el.classList.remove('is-active', 'is-dimmed');
+                if (state) { el.classList.add(state); }
+            });
+        });
+
+        if (key === null) {
+            map.flyToBounds(points, { padding: [40, 40], duration: 0.8 });
+            return;
+        }
+
+        var place = places.filter(function (p) { return p.key === key; })[0];
+        map.flyToBounds(place.area, { padding: [30, 30], maxZoom: 9, duration: 0.8 });
+
+        /* phones: make sure the map is on screen so they can see it move */
+        var box = mapBox.getBoundingClientRect();
+        if (box.top < 70 || box.bottom > window.innerHeight) {
+            mapBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    }
+
+    coverageCards.forEach(function (card) {
+        function choose() {
+            var key = card.getAttribute('data-place');
+            showPlace(activePlace === key ? null : key);   /* click again to zoom back out */
+        }
+
+        card.addEventListener('click', choose);
+        card.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                choose();
+            }
+        });
     });
 }
 

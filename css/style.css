@@ -606,11 +606,29 @@ header{
     border-radius: 12px;
     border-bottom: 4px solid var(--green);
     padding: 28px 16px;
-    transition: transform 0.3s;
+    transition: transform 0.3s, background-color 0.3s;
+    cursor: pointer;
 }
 
 .coverage-item:hover{
     transform: translateY(-6px);
+}
+
+.coverage-item:focus-visible{
+    outline: 2px solid var(--green);
+    outline-offset: 3px;
+}
+
+/* Card that is currently shown on the map */
+.coverage-item.is-active{
+    background-color: var(--green);
+    border-bottom-color: var(--red);
+}
+
+.coverage-item.is-active i,
+.coverage-item.is-active h3,
+.coverage-item.is-active p{
+    color: #ffffff;
 }
 
 .coverage-item i{
@@ -662,6 +680,70 @@ header{
 
 .coverage-map .map-label::before{
     display:none;
+}
+
+/* Card clicked: chosen pin grows, the others fade */
+.coverage-map .map-pin i{
+    display: inline-block;
+    transform-origin: 50% 100%;
+    transition: transform 0.3s;
+}
+
+.coverage-map .map-pin.is-active i{
+    transform: scale(1.25);
+}
+
+.coverage-map .map-pin,
+.coverage-map .map-label{
+    transition: opacity 0.3s;
+}
+
+.coverage-map .map-pin.is-dimmed{
+    opacity: 0.35;
+}
+
+/* Area names are hidden; only the clicked card's name shows.
+   Leaflet sets the label opacity inline, so !important is needed here */
+.coverage-map .map-label{
+    opacity: 0 !important;
+}
+
+.coverage-map .map-label.is-active{
+    opacity: 1 !important;
+    color: var(--red);
+    border-bottom-color: var(--red);
+    font-size: 17px;
+}
+
+/* "Show all areas" button on the map, only while zoomed in */
+.map-reset{
+    display: none;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 6px;
+    background-color: #ffffff;
+    color: var(--green);
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.map-reset:hover{
+    background-color: var(--green);
+    color: #ffffff;
+}
+
+.map-reset:focus-visible{
+    outline: 2px solid var(--green);
+    outline-offset: 2px;
+}
+
+.coverage-map.is-zoomed .map-reset{
+    display: inline-flex;
 }
 
 /*Headquaters card*/

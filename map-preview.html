@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Map Preview - EGM USAHA</title>
+    <meta name="robots" content="noindex">
+    <link rel="icon" type="image/png" href="images/favicon.png">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <link rel="stylesheet" href="css/style.css?v=6">
+
+    <!-- PREVIEW ONLY: styles for the new map. Not used by the live site. -->
+    <style>
+        .preview-note{
+            background-color: #fff6d6;
+            border-bottom: 1px solid #e8d68f;
+            padding: 10px 20px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .region-map{
+            height: 480px;
+            border-radius: 12px;
+            margin-bottom: 40px;
+            background-color: #dde7ea;   /* sea */
+            z-index: 0;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .region-map .leaflet-control-attribution{
+            font-family: 'Open Sans', Arial, sans-serif;
+            font-size: 10px;
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Region name labels drawn on the map */
+        .region-label{
+            background: none;
+            border: none;
+        }
+        .region-label span{
+            display: block;
+            transform: translate(-50%, -50%);
+            white-space: nowrap;
+            text-align: center;
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #ffffff;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+            line-height: 1.2;
+        }
+        .region-label small{
+            display: block;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: none;
+            opacity: 0.9;
+        }
+        .region-label.dark span{
+            color: var(--green);
+            text-shadow: 0 1px 0 rgba(255, 255, 255, 0.8);
+        }
+
+        /* Hover/tap info box */
+        .region-tip{
+            font-family: 'Open Sans', Arial, sans-serif;
+            font-size: 13px;
+            border-radius: 6px;
+            border: none;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+            padding: 8px 12px;
+        }
+        .region-tip strong{
+            display: block;
+            font-family: 'Montserrat', sans-serif;
+            color: var(--green);
+            font-size: 14px;
+        }
+
+        /* Legend */
+        .map-legend{
+            background: rgba(255, 255, 255, 0.92);
+            border-radius: 6px;
+            padding: 10px 12px;
+            font-family: 'Open Sans', Arial, sans-serif;
+            font-size: 12px;
+            line-height: 1.9;
+            color: #333333;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+        }
+        .map-legend i{
+            display: inline-block;
+            width: 14px;
+            height: 10px;
+            margin-right: 8px;
+            border-radius: 2px;
+            vertical-align: -1px;
+        }
+        .map-legend .fa-location-dot{
+            width: 14px;
+            height: auto;
+            text-align: center;
+            color: var(--red);
+            font-size: 13px;
+        }
+
+        /* Cards below the map light up together with the map */
+        .coverage-item{
+            cursor: pointer;
+            transition: transform 0.3s, background-color 0.3s;
+        }
+        .coverage-item.is-linked{
+            background-color: var(--green);
+        }
+        .coverage-item.is-linked i,
+        .coverage-item.is-linked h3,
+        .coverage-item.is-linked p{
+            color: #ffffff;
+        }
+
+        @media(max-width: 800px){
+            .region-map{ height: 380px; }
+            .region-label span{ font-size: 11px; letter-spacing: 1px; }
+            .region-label small{ font-size: 9px; }
+            .map-legend{ display: none; }   /* the cards below explain the map on phones */
+        }
+    </style>
+</head>
+
+<body>
+
+    <p class="preview-note"><strong>Preview only.</strong> This page is not linked from the website. It shows a new version of the coverage map.</p>
+
+    <section class="coverage" id="coverage">
+        <div class="coverage-container">
+
+            <h1>Our Coverage</h1>
+
+            <h2>We Serve Across the Region</h2>
+            <p class="coverage-intro">
+                From our base in Miri, Sarawak, we support clients across Malaysia, Brunei and Indonesia.
+            </p>
+
+            <div id="region-map" class="region-map" role="img"
+                 aria-label="Map of Borneo with the areas we cover shaded: Sarawak, Sabah, Brunei and Kalimantan (Indonesia)"></div>
+
+            <ul class="coverage-list">
+                <li class="coverage-item" data-region="sarawak">
+                    <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+                    <h3>Sarawak</h3>
+                    <p>Headquarters, Miri</p>
+                </li>
+                <li class="coverage-item" data-region="sabah">
+                    <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+                    <h3>Sabah</h3>
+                    <p>East Malaysia</p>
+                </li>
+                <li class="coverage-item" data-region="brunei">
+                    <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+                    <h3>Brunei</h3>
+                    <p>Cross-border support</p>
+                </li>
+                <li class="coverage-item" data-region="kalimantan">
+                    <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+                    <h3>Indonesia</h3>
+                    <p>Cross-border support</p>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="map-preview-data.js"></script>
+    <script>
+    (function () {
+        var GREEN = '#1d4a2c';
+        var data = window.EGM_MAP;
+        if (!data || !window.L) { return; }
+
+        // All regions use the same solid green (solid, so the province lines underneath don't show)
+        var FILL = '#5e7e68';
+
+        // Each region: where its label sits, and its hover text
+        var regions = {
+            sarawak: {
+                name: 'Sarawak', note: 'Headquarters, Miri',
+                label: [2.55, 112.55], dark: false
+            },
+            sabah: {
+                name: 'Sabah', note: 'East Malaysia',
+                label: [5.35, 117.05], dark: false
+            },
+            brunei: {
+                name: 'Brunei', note: 'Cross-border support',
+                label: [5.55, 114.15], dark: true
+            },
+            kalimantan: {
+                name: 'Indonesia', sub: 'Kalimantan', note: 'Cross-border support',
+                label: [-0.8, 114.6], dark: false
+            }
+        };
+
+        var map = L.map('region-map', {
+            zoomControl: false,
+            dragging: false,
+            scrollWheelZoom: false,
+            doubleClickZoom: false,
+            touchZoom: false,
+            boxZoom: false,
+            keyboard: false,
+            zoomSnap: 0.1
+        });
+
+        map.attributionControl.setPrefix(false);
+        map.attributionControl.addAttribution('Boundaries &copy; <a href="https://www.geoboundaries.org">geoBoundaries</a> (CC BY 4.0)');
+
+        // Plain land shapes instead of a busy street map
+        L.polygon(data.land, {
+            stroke: true,
+            color: '#c9d2cc',
+            weight: 0.8,
+            fillColor: '#f7f7f3',
+            fillOpacity: 1,
+            interactive: false
+        }).addTo(map);
+
+        var layers = {};
+
+        // Kalimantan first, so the white borders of Sarawak/Sabah/Brunei are drawn on top of it
+        ['kalimantan', 'sarawak', 'sabah', 'brunei'].forEach(function (key) {
+            var r = regions[key];
+
+            var layer = L.polygon(data.regions[key], {
+                // Kalimantan is 5 provinces: outline them in the fill colour so they read as one area
+                color: key === 'kalimantan' ? FILL : '#ffffff',
+                weight: key === 'kalimantan' ? 2 : 1.2,
+                fillColor: FILL,
+                fillOpacity: 1
+            }).addTo(map);
+
+            layer.bindTooltip('<strong>' + r.name + '</strong>' + r.note, {
+                sticky: true,
+                direction: 'top',
+                className: 'region-tip'
+            });
+
+            layer.on('mouseover', function () { highlight(key, true); });
+            layer.on('mouseout', function () { highlight(key, false); });
+
+            layers[key] = layer;
+
+            L.marker(r.label, {
+                interactive: false,
+                icon: L.divIcon({
+                    className: 'region-label' + (r.dark ? ' dark' : ''),
+                    html: '<span>' + r.name + (r.sub ? '<small>' + r.sub + '</small>' : '') + '</span>',
+                    iconSize: [0, 0]
+                })
+            }).addTo(map);
+        });
+
+        // Legend
+        var legend = L.control({ position: 'bottomleft' });
+        legend.onAdd = function () {
+            var div = L.DomUtil.create('div', 'map-legend');
+            div.innerHTML =
+                '<div><i style="background:' + FILL + '"></i>Areas we cover</div>';
+            return div;
+        };
+        legend.addTo(map);
+
+        // Link the map and the four cards below it
+        var cards = document.querySelectorAll('.coverage-item[data-region]');
+
+        function highlight(key, on) {
+            var colour = on ? GREEN : FILL;
+            layers[key].setStyle(key === 'kalimantan' ? { fillColor: colour, color: colour } : { fillColor: colour });
+            cards.forEach(function (card) {
+                if (card.getAttribute('data-region') === key) {
+                    card.classList.toggle('is-linked', on);
+                }
+            });
+        }
+
+        cards.forEach(function (card) {
+            var key = card.getAttribute('data-region');
+            card.addEventListener('mouseenter', function () { highlight(key, true); });
+            card.addEventListener('mouseleave', function () { highlight(key, false); });
+            // phones: tap a card to highlight its region
+            card.addEventListener('click', function () {
+                var isOn = card.classList.contains('is-linked');
+                Object.keys(layers).forEach(function (k) { highlight(k, false); });
+                if (!isOn) { highlight(key, true); }
+            });
+        });
+
+        // Frame Borneo
+        var borneo = [[-4.3, 108.7], [7.3, 119.3]];
+        function frame() {
+            map.invalidateSize();
+            map.fitBounds(borneo, { padding: [10, 10] });
+        }
+        frame();
+        window.addEventListener('load', frame);
+        window.addEventListener('resize', frame);
+    })();
+    </script>
+</body>
+</html>
