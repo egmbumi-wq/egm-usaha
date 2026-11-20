@@ -47,7 +47,7 @@ if(contactForm){
             })
             .catch(function () {
                 status.style.color = 'var(--red)';
-                status.textContent = 'Sorry, something went wrong. Please email enquiry@gmail.com or call +60 17-217 9899.';
+                status.textContent = 'Sorry, something went wrong. Please email enquiry@egmusaha.com or call +60 85-416 698.';
             })
             .finally(function () {
                 button.disabled = false;
@@ -229,7 +229,7 @@ var bubbleButtons = document.querySelectorAll('.bubble-toggle');
 
 function closeAllBubbles() {
     bubbleButtons.forEach(function (btn) {
-        btn.closest('.service-card').classList.remove('bubble-open');
+        btn.closest('.business-card').classList.remove('bubble-open');
         btn.setAttribute('aria-expanded', 'false');
     });
 }
@@ -237,7 +237,7 @@ function closeAllBubbles() {
 bubbleButtons.forEach(function (btn) {
     btn.addEventListener('click', function (e) {
         e.stopPropagation();
-        var card = btn.closest('.service-card');
+        var card = btn.closest('.business-card');
         var isOpen = card.classList.contains('bubble-open');
         closeAllBubbles();
         if (!isOpen) {
@@ -279,5 +279,28 @@ if (menuToggle && navbar) {
         link.addEventListener('click', function () {
             setMenu(false);
         });
+    });
+}
+
+/* Fade cards in as they scroll into view (styles: "Scroll fade-in" in style.css) */
+var revealItems = document.querySelectorAll('.about-block, .industry-item, .business-card, .coverage-item, .contact-info, .contact-form, .feature-card');
+var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+if ('IntersectionObserver' in window && !reduceMotion) {
+    var revealObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                revealObserver.unobserve(entry.target);
+            }
+        });
+    }, { rootMargin: '0px 0px -60px 0px' });
+
+    revealItems.forEach(function (item) {
+        /* cards in the same row appear one after another */
+        var position = Array.prototype.indexOf.call(item.parentElement.children, item);
+        item.style.animationDelay = Math.min(position, 4) * 0.1 + 's';
+        item.classList.add('reveal');
+        revealObserver.observe(item);
     });
 }

@@ -1271,3 +1271,16 @@ textarea:focus{
 }
 
 
+
+/* Scroll fade-in: script.js adds .reveal to cards and blocks, then .is-visible
+   when they scroll into view. Without JavaScript nothing is hidden. */
+.reveal:not(.is-visible){
+    opacity: 0;
+}
+.reveal.is-visible{
+    animation: revealUp 0.7s ease-out backwards;
+}
+@keyframes revealUp{
+    from{ opacity: 0; transform: translateY(24px); }
+    to{ opacity: 1; transform: none; }
+}
